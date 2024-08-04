@@ -31,7 +31,7 @@ rgb = RGB(pixel_pin = board.MISO,
     )
 keyboard.extensions.append(rgb)
 #layers
-LYR_SR, LYR_ALTSR, LYR_SWARM = 0, 1, 2
+LYR_BASE, LYR_ALTBASE, LYR_SR, LYR_ALTSR, LYR_SWARM = 0, 1, 2, 3, 4
 #custom keys
 ALTTAB = KC.LALT(KC.TAB)
 LEARNQ = KC.LCTL(KC.Q)
@@ -39,6 +39,7 @@ LEARNW = KC.LCTL(KC.W)
 LEARNE = KC.LCTL(KC.E)
 LEARNR = KC.LCTL(KC.R)
 SRSHIFT = KC.MO(LYR_ALTSR)
+BASESHIFT = KC.MO(LYR_ALTBASE)
 #macros
 prev_animation = None
 TO_SWRM = KC.MACRO(
@@ -47,12 +48,30 @@ TO_SWRM = KC.MACRO(
 )
 TO_SR = KC.MACRO(
     Tap(KC.TO(LYR_SR)),
+    Tap(KC.RGB_MODE_BREATHE)
+)
+TO_BASE = KC.MACRO(
+    Tap(KC.TO(LYR_BASE)),
     Tap(KC.RGB_MODE_SWIRL)
 )
 keyboard.keymap = [
+    #LYR_BASE
+    [
+    BASESHIFT, KC.TRNS, KC.N1,
+    KC.A, KC.R, KC.N2,
+    KC.S, KC.W, KC.N4,
+    KC.D, KC.E, KC.TAB
+    ],
+    #LYR_ALTBASE
+    [
+    KC.TRNS, KC.TRNS, KC.N1,
+    KC.A, KC.R, KC.N2,
+    KC.S, KC.W, KC.N4,
+    KC.D, KC.E, KC.TAB
+    ],
     #LYR_SR
     [
-    KC.MO(LYR_ALTSR), KC.Q, KC.N1,
+    SRSHIFT, KC.Q, KC.N1,
     KC.ESC, KC.W, KC.N2,
     KC.D, KC.E, KC.N3,
     KC.F, KC.R, KC.N4
@@ -77,9 +96,11 @@ encoder_handler.pins = (
     (board.D7, board.D6, board.D5),
 )
 encoder_handler.map = [
+    ((KC.RGB_VAD, KC.RGB_VAI, TO_SR),),
+    ((KC.RGB_AND, KC.RGB_ANI, TO_SWRM),),
     ((KC.RGB_VAD, KC.RGB_VAI, TO_SWRM),),
-    ((KC.RGB_VAD, KC.RGB_VAI, TO_SR),),
-    ((KC.RGB_VAD, KC.RGB_VAI, TO_SR),),
+    ((KC.RGB_VAD, KC.RGB_VAI, TO_BASE),),
+    ((KC.RGB_VAD, KC.RGB_VAI, TO_BASE),),
 ]
 keyboard.tap_time = 250
 keyboard.debug_enabled = True
